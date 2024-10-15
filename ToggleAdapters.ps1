@@ -8,10 +8,10 @@
 # PowerShell 脚本 - ToggleAdapters.ps1
 
 # 定义适配器名称
-$adapters = @("VMware Network Adapter VMnet1", "VMware Network Adapter VMnet8", "vEthernet (WSL)")
+$adapters = @("VMware Network Adapter VMnet1", "VMware Network Adapter VMnet8", "vEthernet (WSL (Hyper-V firewall))")
 
 # 获取适配器状态
-$adaptersStatus = Get-NetAdapter | Where-Object { $adapters -contains $_.Name }
+$adaptersStatus = Get-NetAdapter -IncludeHidden | Where-Object { $adapters -contains $_.Name }
 
 # 检查是否有任何适配器是启用状态
 $anyEnabled = $adaptersStatus | Where-Object { $_.Status -eq 'Up' }
@@ -19,7 +19,7 @@ $anyEnabled = $adaptersStatus | Where-Object { $_.Status -eq 'Up' }
 if ($anyEnabled) {
     # 如果有任何适配器是启用状态，禁用所有适配器
     foreach ($adapter in $adapters) {
-        Get-NetAdapter | Where-Object { $_.Name -eq $adapter } | ForEach-Object {
+        Get-NetAdapter -IncludeHidden | Where-Object { $_.Name -eq $adapter } | ForEach-Object {
             Disable-NetAdapter -Name $_.Name -Confirm:$false -ErrorAction SilentlyContinue
             Write-Output "Disabled: $($_.Name)"
         }
@@ -27,7 +27,7 @@ if ($anyEnabled) {
 } else {
     # 如果所有适配器都是禁用状态，启用所有适配器
     foreach ($adapter in $adapters) {
-        Get-NetAdapter | Where-Object { $_.Name -eq $adapter } | ForEach-Object {
+        Get-NetAdapter -IncludeHidden | Where-Object { $_.Name -eq $adapter } | ForEach-Object {
             Enable-NetAdapter -Name $_.Name -Confirm:$false -ErrorAction SilentlyContinue
             Write-Output "Enabled: $($_.Name)"
         }
