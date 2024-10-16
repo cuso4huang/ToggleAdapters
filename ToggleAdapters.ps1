@@ -20,7 +20,7 @@ if ($anyEnabled) {
     # 如果有任何适配器是启用状态，禁用所有适配器
     foreach ($adapter in $adapters) {
         Get-NetAdapter -IncludeHidden | Where-Object { $_.Name -eq $adapter } | ForEach-Object {
-            Disable-NetAdapter -Name $_.Name -Confirm:$false -ErrorAction SilentlyContinue
+            Disable-NetAdapter -IncludeHidden -Name $_.Name -Confirm:$false -ErrorAction SilentlyContinue
             Write-Output "Disabled: $($_.Name)"
         }
     }
