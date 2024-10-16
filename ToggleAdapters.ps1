@@ -8,7 +8,7 @@
 # PowerShell 脚本 - ToggleAdapters.ps1
 
 # 定义适配器名称
-$adapters = @("VMware Network Adapter VMnet1", "VMware Network Adapter VMnet8", "vEthernet (WSL (Hyper-V firewall))")
+$adapters = @("VirtualBox Host-Only Network","VMware Network Adapter VMnet1", "VMware Network Adapter VMnet8", "vEthernet (WSL (Hyper-V firewall))")
 
 # 获取适配器状态
 $adaptersStatus = Get-NetAdapter -IncludeHidden | Where-Object { $adapters -contains $_.Name }
